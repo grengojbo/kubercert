@@ -1,6 +1,6 @@
-module github.com/carlmjohnson/certinfo
+module github.com/grengojbo/kubercert
 
-go 1.16
+go 1.18
 
 require (
 	github.com/carlmjohnson/errutil v0.20.1

@@ -1,4 +1,4 @@
-package main // import "github.com/carlmjohnson/certinfo"
+package main // import "github.com/grengojbo/kubercert"
 import (
 	"crypto/tls"
 	"crypto/x509"
@@ -24,9 +24,9 @@ func main() {
 	exitcode.Exit(exec(os.Args[1:]))
 }
 
-const usage = `Usage of certinfo %s
+const usage = `Usage of kubercert %s
 
-    certinfo [options] <host>...
+    kubercert [options] <host>...
 
 Options:
 `
@@ -111,7 +111,7 @@ Certs:
 	}
 
 	if err := errs.Merge(); err != nil {
-		fmt.Fprintf(os.Stderr, "Problem running certinfo: %+v\n", err)
+		fmt.Fprintf(os.Stderr, "Problem running kubercert: %+v\n", err)
 	}
 	return nil
 }
