@@ -1,4 +1,4 @@
-package main // import "github.com/grengojbo/kubercert"
+package cert // import "github.com/grengojbo/kubercert"
 import (
 	"crypto/tls"
 	"crypto/x509"

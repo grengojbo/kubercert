@@ -29,7 +29,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+// var version string
 var cfgFile string
+var Port int
+var Host string
+var Format string
+var Command string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -48,7 +53,8 @@ to quickly create a Cobra application.`,
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func Execute(version string, commit string, date string, builtBy string) {
+	rootCmd.Version = version
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
@@ -64,6 +70,10 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kubercert.yaml)")
 
+	rootCmd.PersistentFlags().StringVarP(&Host, "host", "H", "localhost", "Kubernetes API host")
+	rootCmd.PersistentFlags().IntVarP(&Port, "port", "p", 6443, "Kubernetes API port")
+	rootCmd.PersistentFlags().StringVarP(&Format, "output", "o", "text", "Output format (text, json)")
+	// rootCmd.PersistentFlags().StringVarP(&Command, "command", "c", "", "Command to execute")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

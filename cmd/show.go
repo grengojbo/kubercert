@@ -5,8 +5,10 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	"time"
 
+	"github.com/grengojbo/kubercert/pkg/cert"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +23,19 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("show called")
+		// fmt.Println("show called")
+		h := cert.HostInfo{
+			Host: Host,
+			Port: Port,
+		}
+
+		timeout := 5 * time.Second
+		if err := h.GetCerts(timeout); err != nil {
+			log.Fatalln(err.Error())
+		}
+		if err := h.ShowCerts(Format); err != nil {
+			log.Fatalln(err.Error())
+		}
 	},
 }
 

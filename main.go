@@ -23,6 +23,11 @@ package main
 
 import "github.com/grengojbo/kubercert/cmd"
 
+var version = "dev"
+var commit = "none"
+var date = "unknown"
+var builtBy = "unknown"
+
 func main() {
-	cmd.Execute()
+	cmd.Execute(version, commit, date, builtBy)
 }
