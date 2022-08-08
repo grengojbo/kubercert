@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/alexellis/go-execute v0.5.0
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect

@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -27,10 +26,8 @@ var renewCmd = &cobra.Command{
 			log.Fatalln(err.Error())
 		}
 		if h.IsExpired() {
-			if err := h.ReNew(Command); err != nil {
-				log.Fatalln(err.Error())
-			}
-			log.Errorln("Certificate is expired")
+			h.RenewCert(Command)
+			// log.Errorln("Certificate is expired")
 		}
 
 		// if err := h.ShowCerts(Format); err != nil {

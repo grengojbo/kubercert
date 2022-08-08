@@ -38,6 +38,8 @@ cloud.google.com/go/storage v1.14.0/go.mod h1:GrKmX003DSIwi9o29oFT7YDnHYwZoctc3f
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
+github.com/alexellis/go-execute v0.5.0 h1:L8kgNlFzNbJov7jrInlaig7i6ZUSz/tYYmqvb8dyD0s=
+github.com/alexellis/go-execute v0.5.0/go.mod h1:AgHTcsCF9wrP0mMVTO8N+lFw1Biy71NybBOk8M+qgy8=
 github.com/carlmjohnson/errutil v0.20.1 h1:RadCQottxZxH7GnrLBg3ssl6/kEe4K1D81EZ6td8f9I=
 github.com/carlmjohnson/errutil v0.20.1/go.mod h1:t1n46sLob5fpvrJ5706xDg0zOcj2FigYuhAn37qSRec=
 github.com/carlmjohnson/exitcode v0.20.2 h1:vE6rmkCGNA4kO4m1qwWIa77PKlUBVg46cNjs22eAOXE=

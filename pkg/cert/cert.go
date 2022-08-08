@@ -11,6 +11,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/grengojbo/kubercert/pkg/shell"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -135,14 +136,45 @@ func FmtDuration(d time.Duration) string {
 	// return fmt.Sprintf("%02dh %02dm", h, m)
 }
 
-// renew the certificate of the host
-func (h *HostInfo) ReNew(command string) error {
+// RenewCert renew the certificate of the host
+func (h *HostInfo) RenewCert(command string) {
 	if len(command) != 0 {
 		log.Infoln("Start renewing the certificate...")
-		return nil
-		// return fmt.Errorf("no command specified")
+		result, err := shell.Run(command, false, false, "")
+		if err != nil {
+			log.Fatalf("Command failed: %s", err.Error())
+		}
+		log.Infof("command: %s", command)
+		log.Infof("responce: %s", result)
+	} else {
+		distro := h.GetKubernetesDistributive()
+		switch distro {
+		case "k3s":
+			h.RenewCertK3s()
+		default:
+			log.Errorf("Unsupported distro: %s", distro)
+		}
 	}
-	distro := h.GetKubernetesDistributive()
-	log.Infof("Renewing certificate for %s", distro)
-	return nil
+}
+
+// RenewCertK3s renew the certificate of the host for k3s
+func (h *HostInfo) RenewCertK3s() {
+	log.Infof("Renewing certificate for k3s")
+
+	command := "systemctl stop k3s.service"
+	log.Infoln("Stop k3s server")
+	_, err := shell.Run(command, false, false, "1")
+	if err != nil {
+		log.Fatalf("Command failed: %s", err.Error())
+	}
+
+	command = "systemctl start k3s.service"
+	log.Infoln("start k3s server")
+	_, err = shell.Run(command, false, false, "2")
+	if err != nil {
+		log.Fatalf("Command failed: %s", err.Error())
+	}
+
+	// log.Infoln("Wait for k3s server to be ready")
+	log.Infoln("Suncessfully renewed certificate for k3s")
 }
