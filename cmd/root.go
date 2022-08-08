@@ -23,8 +23,12 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"strings"
 
+	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/writer"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -60,7 +64,7 @@ func Execute(version string, commit string, date string, builtBy string) {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(initConfig, initLogging)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -74,10 +78,10 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&ExpireDays, "expire", "e", 7, "Certificate expiration days")
 	rootCmd.PersistentFlags().IntVarP(&timeout, "timeout", "t", 5, "Timeout in seconds")
 	rootCmd.PersistentFlags().BoolVarP(&DryRun, "dry-run", "", false, "Dry run")
-	// rootCmd.PersistentFlags().StringVarP(&Command, "command", "c", "", "Command to execute")
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().Bool("verbose", false, "Enable verbose output (debug logging)")
+	rootCmd.PersistentFlags().Bool("trace", false, "Enable super verbose output (trace logging)")
+	_ = viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+	_ = viper.BindPFlag("trace", rootCmd.PersistentFlags().Lookup("trace"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -102,4 +106,51 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+// initLogging initializes the logger
+func initLogging() {
+	if viper.GetBool("trace") {
+		log.SetLevel(log.TraceLevel)
+	} else if viper.GetBool("verbose") {
+		log.SetLevel(log.DebugLevel)
+	} else {
+		switch logLevel := strings.ToUpper(os.Getenv("LOG_LEVEL")); logLevel {
+		case "TRACE":
+			log.SetLevel(log.TraceLevel)
+		case "DEBUG":
+			log.SetLevel(log.DebugLevel)
+		case "WARN":
+			log.SetLevel(log.WarnLevel)
+		case "ERROR":
+			log.SetLevel(log.ErrorLevel)
+		default:
+			log.SetLevel(log.InfoLevel)
+		}
+	}
+	log.SetOutput(ioutil.Discard)
+	log.AddHook(&writer.Hook{
+		Writer: os.Stderr,
+		LogLevels: []log.Level{
+			log.PanicLevel,
+			log.FatalLevel,
+			log.ErrorLevel,
+			log.WarnLevel,
+		},
+	})
+	log.AddHook(&writer.Hook{
+		Writer: os.Stdout,
+		LogLevels: []log.Level{
+			log.InfoLevel,
+			log.DebugLevel,
+			log.TraceLevel,
+		},
+	})
+
+	formatter := &log.TextFormatter{
+		ForceColors: true,
+	}
+
+	log.SetFormatter(formatter)
+
 }
