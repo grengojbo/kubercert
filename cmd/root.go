@@ -35,17 +35,14 @@ var Port int
 var Host string
 var Format string
 var Command string
+var ExpireDays int
+var timeout int
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "kubercert",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Certificates management",
+	Long:  `Kubernetes API certificates management.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -73,10 +70,12 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&Host, "host", "H", "localhost", "Kubernetes API host")
 	rootCmd.PersistentFlags().IntVarP(&Port, "port", "p", 6443, "Kubernetes API port")
 	rootCmd.PersistentFlags().StringVarP(&Format, "output", "o", "text", "Output format (text, json)")
+	rootCmd.PersistentFlags().IntVarP(&ExpireDays, "expire", "e", 7, "Certificate expiration days")
+	rootCmd.PersistentFlags().IntVarP(&timeout, "timeout", "t", 5, "Timeout in seconds")
 	// rootCmd.PersistentFlags().StringVarP(&Command, "command", "c", "", "Command to execute")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.

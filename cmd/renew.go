@@ -5,7 +5,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	"github.com/grengojbo/kubercert/pkg/cert"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
@@ -13,15 +14,29 @@ import (
 // renewCmd represents the renew command
 var renewCmd = &cobra.Command{
 	Use:   "renew",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Certificate rotation",
+	Long:  `Kubernetes API certificate rotation.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("renew command: %s\n", Command)
+		h := cert.HostInfo{
+			Host:       Host,
+			Port:       Port,
+			ExpireDays: ExpireDays,
+		}
+
+		if err := h.GetCerts(timeout); err != nil {
+			log.Fatalln(err.Error())
+		}
+		if h.IsExpired() {
+			if err := h.ReNew(Command); err != nil {
+				log.Fatalln(err.Error())
+			}
+			log.Errorln("Certificate is expired")
+		}
+
+		// if err := h.ShowCerts(Format); err != nil {
+		// 	log.Fatalln(err.Error())
+		// }
+		// log.Infof("Date: %s", h.GetExpire(ExpireDays).Format(time.RFC3339))
 	},
 }
 
