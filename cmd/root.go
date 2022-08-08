@@ -37,6 +37,7 @@ var Format string
 var Command string
 var ExpireDays int
 var timeout int
+var DryRun bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -72,6 +73,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&Format, "output", "o", "text", "Output format (text, json)")
 	rootCmd.PersistentFlags().IntVarP(&ExpireDays, "expire", "e", 7, "Certificate expiration days")
 	rootCmd.PersistentFlags().IntVarP(&timeout, "timeout", "t", 5, "Timeout in seconds")
+	rootCmd.PersistentFlags().BoolVarP(&DryRun, "dry-run", "", false, "Dry run")
 	// rootCmd.PersistentFlags().StringVarP(&Command, "command", "c", "", "Command to execute")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

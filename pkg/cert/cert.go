@@ -24,6 +24,7 @@ type HostInfo struct {
 	Expired    string
 	ExpiredAt  time.Time
 	ExpireDays int
+	DryRun     bool
 }
 
 // GetCerts returns the certificates of the host
@@ -161,16 +162,21 @@ func (h *HostInfo) RenewCert(command string) {
 func (h *HostInfo) RenewCertK3s() {
 	log.Infof("Renewing certificate for k3s")
 
+	dryRunResponce := ""
+	if h.DryRun {
+		dryRunResponce = "ok..."
+	}
+
 	command := "systemctl stop k3s.service"
 	log.Infoln("Stop k3s server")
-	_, err := shell.Run(command, false, false, "1")
+	_, err := shell.Run(command, false, false, dryRunResponce)
 	if err != nil {
 		log.Fatalf("Command failed: %s", err.Error())
 	}
 
 	command = "systemctl start k3s.service"
 	log.Infoln("start k3s server")
-	_, err = shell.Run(command, false, false, "2")
+	_, err = shell.Run(command, false, false, dryRunResponce)
 	if err != nil {
 		log.Fatalf("Command failed: %s", err.Error())
 	}

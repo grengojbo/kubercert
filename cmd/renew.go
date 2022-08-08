@@ -20,6 +20,7 @@ var renewCmd = &cobra.Command{
 			Host:       Host,
 			Port:       Port,
 			ExpireDays: ExpireDays,
+			DryRun:     DryRun,
 		}
 
 		if err := h.GetCerts(timeout); err != nil {
